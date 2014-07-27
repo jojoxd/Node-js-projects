@@ -1,0 +1,23 @@
+{
+  "name": "OBS_Stream_bar",
+  "version": "1.0.0",
+  "description": "use in combination with CLR browser source",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "OBS", "Open Broadcaster Software", "CLR Browser source plugin", "titlebar"
+  ],
+  "author": "JojoXD",
+  "license": "LGPLv3",
+  "dependencies" : {
+    "express" : ">=4.6.1",
+	"request" : ">=2.39.0",
+	"socket.io" : ">=1.0.6"
+  }
+}

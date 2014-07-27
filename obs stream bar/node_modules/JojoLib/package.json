@@ -1,0 +1,4 @@
+{
+	"name" : "JojoLib",
+	"main" : "./lib/JojoLib.js"
+}

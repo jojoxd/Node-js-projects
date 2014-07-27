@@ -1,0 +1,52 @@
+.container {
+	width:  1920px;
+	height: 50px;
+	/*background-color: #FF0000;*/
+	font-size: 25px;
+}
+
+/* use this on all text to *center* vertically */
+.txt-margins {
+	margin-top:    12.5px;
+	margin-bottom: 12.5px;
+}
+
+/* use this to leve out whitespace on top/left side */
+.no-margins {
+	margin-left:   0px;
+	margin-right:  0px;
+	margin-top:    0px;
+	margin-bottom: 0px;
+}
+
+.inline {
+	float: left;
+}
+
+/* this is for the round spacers */
+.spacer {
+	width:  75px;
+	height: 50px;
+}
+
+.oneThird {
+	width: 565px !important;
+	background-image: url(./oneThird.svg);
+}
+
+.oneSixth {
+	width: 245px !important;
+	background-image: url(./oneSixth.svg);
+}
+
+.marqueeContainer {
+	/* render svg as background   */
+	/* background-color: #FF0000; */
+	height: 50px;
+	overflow: hidden;
+}
+
+.test {
+	width: 245px !important;
+	background-image: url("./oneSixth.svg");
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>OBS STREAM BAR</title>
+		
+		<meta charset="UTF-8">
+		
+		<link href="stylesheet2.css" rel="stylesheet">
+		
+		<!-- jQuery + JojoLib from CDN -->
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<script src="http://cdn.jojoxd.nl/jojolib.php"></script>
+		
+		<!-- Socket.io -->
+		<script src="/socket.io/socket.io.js"></script>
+		
+		<!-- function libraries -->
+		<script src="./jquery.scrollbox.js"></script>
+		<script src="./newFollowers.js"></script>
+		<script src="./functions.js"></script>
+	</head>
+	
+	<body class="no-margins">
+		<div class="container">
+			
+			<!-- follower stuff -->
+			<div class="marqueeContainer inline oneSixth">
+				<div id="followerMarquee" class="marquee">
+					<p id="newFollower" class="txt-margins">
+						<span id="followerAlert">nobody followed me yet :(</span><span id="NewUser"></span>
+					</p>
+				</div>
+			</div>
+			
+			<div class="spacer inline"></div>
+			
+			<!-- Announcement stuff -->
+			<div class="marqueeContainer inline oneThird">
+				<div id="announcementMarquee" class="marquee">
+					<p class="txt-margins announcements">
+						Announcements: none
+					</p>
+				</div>
+			</div>
+			
+			<div class="spacer inline"></div>
+			
+			<!-- ??? -->
+			<div class="marqueeContainer inline oneThird">
+				<div class="marquee">
+					<p class="txt-margins">
+					---
+				</div>
+			</div>
+			
+			<div class="spacer inline"></div>
+			
+			<!-- /vlc/ stuff -->
+			<div class="marqueeContainer inline oneSixth">
+				<div id="vlcMarquee" class="marquee">
+					<p class="txt-margins music">
+						<span class="name"></span> - <span class="artist"></span>
+					</p>
+				</div>
+			</div>
+			
+			<div class="spacer inline"></div>
+			
+		</div>
+	</body>
+</html>
