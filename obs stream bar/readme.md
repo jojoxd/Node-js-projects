@@ -6,11 +6,22 @@ this node.js server will make a bar on a html page, which you can load with [CLR
 
 get Node.js [here](http://nodejs.org)!
 
-### usage
+## usage
 
 just double-click run.bat to start the server
 
 the server will listen to port 81, but you can change it in the settings @ [app.js](./app.js)
+
+### layout
+
+to change the layout, change the clientSettings @ [app.js](./app.js)
+
+howto: 
+```
+"[1/3|1/6]-[followers|announcements|vlc|spacer],andAgain,andAgain,...";
+```
+
+
 
 screenshot: 
 

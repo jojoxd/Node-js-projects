@@ -11,6 +11,13 @@ var settings = {
 		requestNo: 0,
 	},
 };
+
+var ClientSettings = {
+	setup: "1/6-followers,1/3-announcements,1/3-spacer,1/6-vlc",
+	debug: true,
+};
+
+
 var vars = {
 	socketCount: 0,
 }
@@ -48,39 +55,6 @@ server.listen(settings.PORT, function(){
 	JojoLib.out.log("SERVER", "Running on port #" + settings.PORT, "HTTP");
 });
 
-app.get('/vlc/status', function(req, res){
-	JojoLib.out.log("APPGET", "got request!", "/vlc/status");
-	
-	var cbURL = stripURL(req.url);
-	if(typeof cbURL.callback != 'undefined'){
-		JojoLib.out.log("APPGET", "got callback! ( " + cbURL.callback + " )", "/vlc/status");
-		//res.write(cbURL.callback);
-	}
-	
-	var requestURL = url.resolve('http://' + settings.vlc.HOST + ":" + settings.vlc.PORT, settings.vlc.resource);
-	
-	var auth = getAuthHeaderArray(settings.vlc.username, settings.vlc.password);
-	
-	JojoLib.out.log("APPGET", "making request", "/vlc/status");
-	
-	request.get(requestURL, function(error, response, body){
-		if(error && response.statusCode != 200){
-			// error handling here!
-			JojoLib.out.warn(error);
-		}
-		else{
-			JojoLib.out.log("APPGET", "sending response!", "/vlc/status");
-			//res.write(response.body);
-			res.end();
-			
-			settings.vlc.requestNo++;
-			
-			JojoLib.out.log("APPGET", "response sent! ( " + settings.vlc.requestNo + " )", "/vlc/status");
-		}
-	}).auth(settings.vlc.username, settings.vlc.password, false);
-	
-});
-
 /*	SocketIO stuff				*/
 io.on('connection', function(socket){
 	
@@ -93,7 +67,14 @@ io.on('connection', function(socket){
 		JojoLib.out.log("io", "a socket has disconnected [sockets connected: " + vars.socketCount + "]", "SOCKET.IO");
 	});
 	
+	// send client setup info
+	socket.on('getClientSettings', function(){
+		JojoLib.out.log("getClientSettings", "A socket wants settings!", "SOCKET.IO");
+		socket.emit('ClientSettings', ClientSettings);
+	});
+	
 	socket.on('wantVLCstatus', function(data){
+		JojoLib.out.log("wantVLCstatus", "A socket wants VLC status", "SOCKET.IO");
 		var requestURL = url.resolve('http://' + settings.vlc.HOST + ":" + settings.vlc.PORT, settings.vlc.resource);
 		request.get(requestURL, function(error, response, body){
 			if(error && response.statusCode != 200){
@@ -105,7 +86,6 @@ io.on('connection', function(socket){
 				
 				socket.emit('VLCSTATUS', JSON.parse(response.body));
 				
-				JojoLib.out.log("wantVLCstatus", "A socket wants VLC status", "SOCKET.IO");
 			}
 		}).auth(settings.vlc.username, settings.vlc.password, false);
 	})

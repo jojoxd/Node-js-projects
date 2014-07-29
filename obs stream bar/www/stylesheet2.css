@@ -20,7 +20,8 @@
 }
 
 .inline {
-	float: left;
+	/*float: left;*/
+	display: inline-block;
 }
 
 /* this is for the round spacers */
@@ -36,6 +37,16 @@
 
 .oneSixth {
 	width: 245px !important;
+	background-image: url(./oneSixth.svg);
+}
+
+.spacerOneThird {
+	width: 640px !important;
+	background-image: url(./oneThird.svg);
+}
+
+.spacerOneSixth {
+	width: 320px !important;
 	background-image: url(./oneSixth.svg);
 }
 
