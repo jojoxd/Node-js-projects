@@ -56,7 +56,7 @@ function Announcements(){
 				JojoLib.out.log("ANNOUNCEMENTS", "No Announcements");
 				if(variables.announcements.had_announcement){
 					// it had an announcement, but not any more
-					$('#announcementsMarquee')
+					$('.announcementsMarquee')
 					 .marquee()
 					 .fadeOut()
 					 .marquee('destroy')
@@ -84,7 +84,7 @@ function Announcements(){
 					
 					JojoLib.out.log("setting announcements!");
 					
-					$('#announcementMarquee')
+					$('.announcementMarquee')
 					 .marquee()
 					 .fadeOut()
 					 .marquee('destroy')
@@ -120,7 +120,7 @@ variables.socket.on('VLCSTATUS', function(data){
 	JojoLib.out.log("VLCSTATUS", "got vlc status", "SOCKET.IO");
 	
 	// check status:
-	if(data.state == "stopped" || data.state == "paused"){
+	if(data.state != "playing"){
 		// the music stopped / is paused
 		JojoLib.out.log("VLC has " + data.state + "!");
 		
@@ -128,7 +128,7 @@ variables.socket.on('VLCSTATUS', function(data){
 			// vlc was already stopped/paused last time we checked, do nothing
 		}
 		else{
-			$('#vlcMarquee')
+			$('.vlcMarquee')
 			 .marquee()
 			 .fadeOut()
 			 .marquee('destroy')
@@ -151,7 +151,7 @@ variables.socket.on('VLCSTATUS', function(data){
 			
 			// resetting marquee:
 			
-			$('#vlcMarquee')
+			$('.vlcMarquee')
 			 .marquee()
 			 .fadeOut()
 			 .marquee('destroy')
@@ -162,8 +162,6 @@ variables.socket.on('VLCSTATUS', function(data){
 			
 			JojoLib.out.log(data.information.category.meta.title);
 			JojoLib.out.log(data.information.category.meta.artist);
-			
-			//$('#musicMarquee').toggleClass('marquee');
 			
 			// set vlc cache
 			variables.vlc.cache.name = data.information.category.meta.title;
@@ -238,22 +236,21 @@ function renderBar(length, what){
 		
 		$('.container').append("<!-- Announcements <" + length + "> -->");
 		
-		$('.container').append("<div class='marqueeContainer inline " + classes + "'><div id='announcementMarquee' class='marquee'><p class='txt-margins announcements'>Announcements: none</p></div></div><div class='spacer inline'></div>");
-		//$('#announcementMarquee.marquee').marquee(); // marquee it up!
+		$('.container').append("<div class='marqueeContainer inline " + classes + "'><div class='announcementMarquee marquee'><p class='txt-margins announcements'>Announcements: none</p></div></div><div class='spacer inline'></div>");
 	}
 	else if(what == "vlc"){
 		JojoLib.out.log("adding vlc bar with length " + length);
 		
 		$('.container').append("<!-- VLC <" + length + "> -->");
 		
-		$('.container').append("<div class='marqueeContainer inline " + classes + "'><div id='vlcMarquee' class='marquee'><p class='txt-margins music'><span class='name'></span> - <span class='artist'></span></p></div></div><div class='spacer inline'></div>");
+		$('.container').append("<div class='marqueeContainer inline " + classes + "'><div class='vlcMarquee marquee'><p class='txt-margins music'><span class='name'></span> - <span class='artist'></span></p></div></div><div class='spacer inline'></div>");
 	}
 	else if(what == 'followers'){
 		JojoLib.out.log("adding follower bar with length " + length);
 		
 		$('.container').append("<!-- Followers <" + length + "> -->");
 		
-		$('.container').append("<div class='marqueeContainer inline " + classes + "'><div id='followerMarquee' class='marquee'><p id='newFollower' class='txt-margins'><span id='followerAlert'>nobody followed me yet :(</span><span id='newUser'></span></p></div></div><div class='spacer inline'></div>");
+		$('.container').append("<div class='marqueeContainer inline " + classes + "'><div class='followerMarquee marquee'><p id='newFollower' class='txt-margins'><span id='followerAlert'>nobody followed me yet :(</span><span id='newUser'></span></p></div></div><div class='spacer inline'></div>");
 	}
 	else if(what == 'spacer'){
 		JojoLib.out.log("adding spacer with length " + length);

@@ -1,1 +1,1 @@
-miep
+this will show up in the announcements section! <span style='color: #00ff00'><i>html</i> code <b>also</b> works!</span>, also, I will refresh from file every 30 seconds!

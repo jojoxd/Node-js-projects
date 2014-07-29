@@ -64,7 +64,7 @@ var followers = {};
 			// request socket.io to change the latestFollower.txt
 			variables.socket.emit("setLatestFollower", user);
 			
-			$('#followerMarquee')
+			$('.followerMarquee')
 			 .marquee()
 			 .fadeOut()
 			 .marquee('destroy')

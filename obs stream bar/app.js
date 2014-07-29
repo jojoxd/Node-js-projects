@@ -3,12 +3,12 @@ var settings = {
 	DIR: 'www',
 	
 	vlc: {
-		username: '',
-		password: '1234',
+		username: '', // leave empty!
+		password: '1234', // password you put in your vlc
 		PORT: 8080,
 		HOST: '127.0.0.1',
 		resource: '/requests/status.json',
-		requestNo: 0,
+		enabled: true, // disable if you do not use vlc as music player
 	},
 };
 
@@ -74,20 +74,26 @@ io.on('connection', function(socket){
 	});
 	
 	socket.on('wantVLCstatus', function(data){
-		JojoLib.out.log("wantVLCstatus", "A socket wants VLC status", "SOCKET.IO");
-		var requestURL = url.resolve('http://' + settings.vlc.HOST + ":" + settings.vlc.PORT, settings.vlc.resource);
-		request.get(requestURL, function(error, response, body){
-			if(error && response.statusCode != 200){
-				// error handling here!
-				JojoLib.out.warn(error);
-			}
-			else{
-				JojoLib.out.log("APPGET", "sending response!", "/vlc/status");
-				
-				socket.emit('VLCSTATUS', JSON.parse(response.body));
-				
-			}
-		}).auth(settings.vlc.username, settings.vlc.password, false);
+		if(settings.vlc.enabled){
+			JojoLib.out.log("wantVLCstatus", "A socket wants VLC status", "SOCKET.IO");
+			var requestURL = url.resolve('http://' + settings.vlc.HOST + ":" + settings.vlc.PORT, settings.vlc.resource);
+			request.get(requestURL, function(error, response, body){
+				if(error && response.statusCode != 200){
+					// error handling here!
+					JojoLib.out.warn(error);
+				}
+				else{
+					JojoLib.out.log("APPGET", "sending response!", "/vlc/status");
+					
+					socket.emit('VLCSTATUS', JSON.parse(response.body));
+					
+				}
+			}).auth(settings.vlc.username, settings.vlc.password, false);
+		}
+		else{
+			// vlc is not enabled
+			socket.emit('VLCSTATUS', {state: "<b>no vlc enabled!</b>"});
+		}
 	})
 	
 	socket.on('setLatestFollower', function(data){
