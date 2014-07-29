@@ -10,7 +10,7 @@ get Node.js [here](http://nodejs.org)!
 
 just double-click run.bat to start the server
 
-the server will listen to port 81, but you can change it in the settings @ app.js
+the server will listen to port 81, but you can change it in the settings @ [app.js](./app.js)
 
 screenshot: 
 
