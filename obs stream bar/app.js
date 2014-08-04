@@ -69,8 +69,7 @@ var getAuthHeaderArray = function(username, password){
 }
 
 var setupSettings = function(){
-	settings.ircBot.channels = ["#" + settings.stream.channel.toLowerCase()];
-	settings.ircBot.server = ""
+	
 }
 
 setupSettings();
@@ -156,6 +155,7 @@ io.on('connection', function(socket){
 	});
 	
 	socket.on('wantSpotifyStatus', function(){
+		vars.spotifyReq++;
 		spotify.getStatus(function (err, res){
 			if(err) {
 				JojoLib.out.log(err);

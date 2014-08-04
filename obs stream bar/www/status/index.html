@@ -5,8 +5,6 @@
 		
 		<meta charset="utf-8">
 		
-		<meta http-equiv="refresh" content="10">
-		
 		<script src="http://code.jquery.com/jquery.js"></script>
 		<script src="http://cdn.jojoxd.nl/jojolib.php"></script>
 		<script src="./functions.js"></script>
@@ -17,12 +15,23 @@
 		<br>
 		<p>
 			<h4>Vlc (<span class="vlcVersion"></span>)</h4>
-			<span class="vlcInfo"></span>
+			<span class="vlcInfo">
+				state: <span class="vlc_state"></span><br>
+				times requested: <span class="vlc_requests"></span><br>
+				<span class="vlc_number"></span><br>
+			</span>
 			<h4>Spotify (<span class="spotifyVersion"></span>)</h4>
-			<span class="spotifyInfo"></span>
+			<span class="spotifyInfo">
+				Running: <span class="spotify_running"></span><br>
+				state: <span class="spotify_state"></span><br>
+				times requested: <span class="spotify_requests"></span><br>
+				<span class="spotify_number"></span>
+			</span>
 			<br>
 			<h4>Sockets</h4>
-			<span class="connection"></span>
+			<span class="connection">
+				connected Sockets: <span class="socket_connected"></span><br>
+			</span>
 		</p>
 	</body>
 </html>
