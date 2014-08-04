@@ -6,14 +6,6 @@ var settings = {
 		channel: "yourChannelName",
 	},
 	
-	ircBot: {
-		enabled: "undefined", // this will be set later
-		// used for subtracker (connects to your twitch irc chat to read the messages)
-		username: "", // type a username for the bot (has to already be registered at twitch.tv)
-		// the oAuth you use to get in your twitch bot account:
-		oAuth: "oauth:burble", // get your oAuth code here: http://www.twitchapps.com/tmi/
-	},
-	
 	vlc: {
 		username: '', // leave empty! (vlc does not use the username field -_-')
 		password: '1234', // password you put in your vlc
@@ -23,12 +15,12 @@ var settings = {
 		enabled: true, // disable if you do not use vlc as music player
 	},
 	
-	donationTracker: {
+	donationTracker: { // not implemented yet...
 		enabled: true,
 		file: "C:/path/to/donation/tracker.txt",
 	},
 	
-	subTracker: {
+	subTracker: { // not implemented yet...
 		// enable if you are a partnered streamer!
 		enabled: true,
 	},
@@ -47,6 +39,8 @@ var ClientSettings = {
 
 var vars = {
 	socketCount: 0,
+	VLCReq: 0,
+	spotifyReq: 0,
 }
 
 // header: 
@@ -92,6 +86,28 @@ server.listen(settings.PORT, function(){
 	JojoLib.out.log("SERVER", "Running on port #" + settings.PORT, "HTTP");
 });
 
+app.get('/status/spotify.json', function(req, res){
+	spotify.getStatus(function(err, resp){
+		res.send(resp);
+	});
+});
+
+app.get('/status/vlc.json', function(req, res){
+	var requestURL = url.resolve('http://' + settings.vlc.HOST + ":" + settings.vlc.PORT, settings.vlc.resource);
+	request.get(requestURL, function(error, response, body){
+		if(error){
+			res.send({"state": "not running!", "version": "version: I Don't know yet"});
+		}
+		else{
+			res.send(response.body);
+		}
+	}).auth(settings.vlc.username, settings.vlc.password, false);
+});
+
+app.get('/status/vars.json', function(req, res){
+	res.send({"connected_sockets": vars.socketCount, "vlcRequests": vars.VLCReq, "spotifyRequests": vars.spotifyReq});
+});
+
 /*	SocketIO stuff				*/
 io.on('connection', function(socket){
 	
@@ -115,6 +131,7 @@ io.on('connection', function(socket){
 	});
 	
 	socket.on('wantVLCstatus', function(data){
+		vars.VLCReq++;
 		if(settings.vlc.enabled){
 			JojoLib.out.log("wantVLCstatus", "A socket wants VLC status", "SOCKET.IO");
 			var requestURL = url.resolve('http://' + settings.vlc.HOST + ":" + settings.vlc.PORT, settings.vlc.resource);
@@ -136,17 +153,25 @@ io.on('connection', function(socket){
 			// vlc is not enabled
 			socket.emit('VLCSTATUS', {state: "<b>no vlc enabled!</b>"});
 		}
-	})
+	});
 	
 	socket.on('wantSpotifyStatus', function(){
 		spotify.getStatus(function (err, res){
 			if(err) {
 				JojoLib.out.log(err);
-				socket.emit('spotifyStatus', {artist: "", track: "", state: "something went wrong!"});
+				socket.emit('spotifyStatus', {artist: "", track: "", state: "something went wrong! (" + err + ")"});
 			}
 			else{
-				JojoLib.out.log("spotify: " + res.track.track_resource.name + " - " + res.track.artist_resource.name);
-				socket.emit('spotifyStatus', {artist: res.track.artist_resource.name, track: res.track.track_resource.name, state: "good"});
+				if(res.running){
+					if(res.playing){ state = "playing"; }
+					else{ state = "paused"; }
+					JojoLib.out.log("spotify: [" + state + "] " + res.track.track_resource.name + " - " + res.track.artist_resource.name);
+					socket.emit('spotifyStatus', {artist: res.track.artist_resource.name, track: res.track.track_resource.name, state: state});
+				}
+				else{
+					// spotify isn't running!
+					socket.emit('spotifyStatus', {artist: "", track: "", state: "<b>spotify isn't running!<b>"});
+				}
 			}
 		});
 	});

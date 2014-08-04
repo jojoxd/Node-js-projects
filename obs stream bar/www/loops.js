@@ -77,10 +77,10 @@ function VLC(){
 }
 
 variables.socket.on('VLCSTATUS', function(data){
-	JojoLib.out.log("VLCSTATUS", "got vlc status", "SOCKET.IO");
+	JojoLib.out.log("VLCSTATUS", "got vlc status [" + data.state + "]", "SOCKET.IO");
 	
 	// check status:
-	if(data.state != "playing"){
+	if(data.state == "paused" || data.state == "stopped"){
 		// the music stopped / is paused
 		
 		if(variables.vlc.state == data.state){
@@ -94,10 +94,8 @@ variables.socket.on('VLCSTATUS', function(data){
 			 .html("<p class='txt-margins music'><span class='state'>[" + data.state + "]</span></p>")
 			 .marquee()
 			.fadeIn();
+			variables.vlc.state = data.state;
 		}
-		
-		
-		variables.vlc.state = data.state;
 		
 	}
 	else if(data.state == "playing"){
@@ -125,6 +123,7 @@ variables.socket.on('VLCSTATUS', function(data){
 			// set vlc cache
 			variables.vlc.cache.name = data.information.category.meta.title;
 			variables.vlc.cache.artist = data.information.category.meta.artist;
+			variables.vlc.state = data.state;
 		}
 	}
 });
@@ -146,7 +145,7 @@ function spotify(){
 }
 
 variables.socket.on('spotifyStatus', function(data){
-	if(data.state == "good"){
+	if(data.state == "playing"){
 		JojoLib.out.log("spotify<" + data.state + ">: " + data.track + " - " + data.artist);
 		if(variables.spotify.state == data.state){
 			//check if it is the same song
@@ -172,6 +171,22 @@ variables.socket.on('spotifyStatus', function(data){
 		}
 		
 		
+	}
+	else if(data.state == "paused"){
+		if(data.state == variables.spotify.state){
+			// the state didn't change
+		}
+		else{
+			JojoLib.out.log("Spotify is paused!");
+			$('.SpotifyMarquee')
+			 .marquee()
+			 .fadeOut()
+			 .marquee('destroy')
+			 .html("<p class='txt-margins music'>[paused]</p>")
+			 .marquee()
+			.fadeIn();
+			variables.spotify.state = data.state;
+		}
 	}
 	else {
 		variables.spotify.state = data.state;
